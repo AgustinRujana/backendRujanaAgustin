@@ -1,9 +1,11 @@
 import express from 'express'
-import mainRouter from '../routes/main.js'
+
+import routesMain from '../routes/routes.js'
 
 const app = express()
 
 app.use(express.json())
-app.use('/api', mainRouter)
+
+app.use('/api', routesMain)
 
 export default app
