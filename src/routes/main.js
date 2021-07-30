@@ -1,10 +1,11 @@
+import express from 'express'
+import passport from '../middleware/auth.js'
+import routes from '../routes/routes.js'
+import secureRoute from '../routes/secureRoutes.js'
 
+const router = express.Router()
 
-// import routes from '../routes/routes.js'
-// import secureRoutes from '../routes/secureRoutes.js'
+router.use('/', routes)
+router.use('/user', passport.authenticate('jwt', {session: false}), secureRoute)
 
-export default function router(app, passport) {
-    // app.use('/', routes(passport));
-    // app.use('/user', passport.authenticate('jwt', { session: false }), secureRoutes)
-}
-
+export default router

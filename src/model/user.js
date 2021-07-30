@@ -20,12 +20,10 @@ const userSchema = mongoose.Schema({
     name: {
         type: String,
         required: true,
-        unique: true
     },
     phone: {
         type: Number,
-        required: true,
-        unique: true
+        required: true
     },
     admin: {
         type: Boolean

@@ -13,6 +13,8 @@ dotenv.config({
 const config = {
     PORT: process.env.PORT|| 8080,
     DATABASE_URL: process.env.DATABASE_URL || 'DATABASE_URL',
+    TOKEN_KEEP_ALIVE: process.env.TOKEN_KEEP_ALIVE || '1h',
+    JWT_SECRET_KEY: process.env.JWT_SECRET_KEY || 'WHY THIS EXIST GOD'
 }
 
 export default config

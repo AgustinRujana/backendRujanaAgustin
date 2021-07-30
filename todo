@@ -1,0 +1,21 @@
+// DONE // POST api/user/signup
+// DONE // POST api/user/login
+
+POST api/image/upload
+GET api/image/{imageFileName}
+DELETE api/image/{imageFileName}
+
+GET api/products
+GET api/products/{:category}
+POST api/products
+PATH api/products/{:productId}
+DELETE api/products/{:productId}
+
+GET api/cart
+POST api/cart/add
+POST api/cart/delete
+POST api/cart/submit
+
+GET api/orders
+GET api/orders/{:orderId}
+POST api/orders/complete
