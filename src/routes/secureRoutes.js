@@ -1,4 +1,5 @@
 import express from 'express'
+
 const router = express.Router()
 
 router.get('/profile', (req, res, next) => {
@@ -8,5 +9,7 @@ router.get('/profile', (req, res, next) => {
         token: req.query.secret_token
     })
 })
+
+
 
 export default router

@@ -13,8 +13,8 @@ const strategyOptions = {
 }
 
 const strategyJWT = {
-    secretOrKey: config.JWT_SECRET_KEY,
     jwtFromRequest: ExtractJwt.fromAuthHeaderAsBearerToken(),
+    secretOrKey: config.JWT_SECRET_KEY,
 }
 
 const signup = async (req, email, password, done) => {
@@ -77,11 +77,15 @@ passport.use('login', new localStrategy(strategyOptions, login))
 
 passport.use(
     new JWTStrategy(strategyJWT, async(token, done) => {
-        try {
-            return done(null, token.user) 
-        } catch (error) {
-            done(error)            
-        }
+      process.nextTick(() => {
+        return User.findOneById(token.id)
+              .then(user => {
+                  return done(null, user);
+              })
+              .catch(err => {
+                  return done(err);
+              });
+      })
     })
 )
 
