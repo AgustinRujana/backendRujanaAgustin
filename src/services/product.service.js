@@ -1,4 +1,3 @@
-import { ResultWithContext } from "express-validator/src/chain"
 import { product as Product } from "../model/products.js"
 
 export const getProducts = async (req, res) => {

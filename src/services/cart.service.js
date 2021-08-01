@@ -12,7 +12,7 @@ export const findOne = (req, res) => {
     })
 }
 
-export const addProduct = (req, res) => {
+export const addProduct = async (req, res) => {
     const { productId, quantity} = req.body;
     Product.findById({ productId }).then( product => {
         //Checkeo si el producto existe
@@ -21,7 +21,7 @@ export const addProduct = (req, res) => {
         if(quantity > product.stock) { return res.status(400).json({message: 'Cantidad no valida'})}
         
         try {
-            let cart = await Cart.findOne({ userId: req.user.id });
+            let cart = Cart.findOne({ userId: req.user.id });
         
             if (cart) {
                 //Cuando el carrito existe
@@ -39,11 +39,11 @@ export const addProduct = (req, res) => {
                 cart.updateDate = new Date()
               }
               //Guardo todo y envio
-              cart = await cart.save();
+              cart = cart.save();
               return res.status(201).json(cart);
             } else {
                 //Si el carrito no existe
-              const newCart = await Cart.create({
+              const newCart = Cart.create({
                 userId,
                 products: [{ productId, quantity}],
                 creationDate: new Date(),
@@ -63,7 +63,7 @@ export const addProduct = (req, res) => {
 }
 export const cartSubmit = (req, res) => {
     try {
-        let cart = await Cart.findOne({ userId: req.user.id });
+        let cart = Cart.findOne({ userId: req.user.id });
     
         if (cart) {
             //Encuentro el carrito y chequeo que tenga algo
@@ -74,7 +74,7 @@ export const cartSubmit = (req, res) => {
             const total = async () => {
                 let total = 0
                 cart.products.forEach(e => {
-                    let product = await Product.findById(e.productId)
+                    let product = Product.findById(e.productId)
                     total = total + product.price * e.quantity
                 });
                 return total
@@ -88,11 +88,11 @@ export const cartSubmit = (req, res) => {
             newOrder.total = total()
 
             //ACA MANDO EL MAIL
-            newOrder =  await newOrder.save()  
+            newOrder =  newOrder.save()  
 
             cart.products = []
-            cart = await cart.save();
-            
+            cart = cart.save();
+
             return res.status(200);
         } else {
             //Si el carrito no existe    
@@ -113,7 +113,7 @@ export const deleteProduct = (req, res) => {
         if(quantity < 0 || quantity > product.stock) { return res.status(400)}
 
         try {
-            let cart = await Cart.findOne({ userId: req.user.id });
+            let cart =  Cart.findOne({ userId: req.user.id });
         
             if (cart) {
                 //Cuando el carrito existe
@@ -130,7 +130,7 @@ export const deleteProduct = (req, res) => {
                 res.status(400)
               }
               //Guardo todo y envio
-              cart = await cart.save();
+              cart =  cart.save();
               return res.status(201).send(cart);
             } else {
                 //Si el carrito no existe        
