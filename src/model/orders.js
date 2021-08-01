@@ -7,7 +7,7 @@ const collectionOrders = 'order';
 //////////////////////////////////
 
 const orderSchema = mongoose.Schema({
-    UserId: {
+    userId: {
         type: String,
         required: true,
         unique: true

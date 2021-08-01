@@ -2,17 +2,22 @@
 // DONE // POST api/user/login
 
 POST api/image/upload
-GET api/image/{imageFileName}
-DELETE api/image/{imageFileName}
+    Falta productId
+    Validacion tira siempre 401
+    routes/image linea 22
 
-GET api/products
-GET api/products/{:category}
-POST api/products
-PATH api/products/{:productId}
-DELETE api/products/{:productId}
+// DONE // GET api/image/{imageFileName}
 
-GET api/cart
-POST api/cart/add
+// DONE // DELETE api/image/{imageFileName}
+
+// DONE // GET api/products
+// DONE // GET api/products/{:category}
+// DONE // POST api/products
+// DONE // PATH api/products/{:productId}
+// DONE // DELETE api/products/{:productId}
+
+// DONE // GET api/cart
+// DONE // POST api/cart/add
 POST api/cart/delete
 POST api/cart/submit
 

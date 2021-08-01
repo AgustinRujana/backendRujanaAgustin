@@ -9,15 +9,12 @@ const collectionCarts = 'cart';
 const cartDetailSchema = mongoose.Schema({
     street: {
         type: String,
-        required: true
     },
     streetNumber: {
         type: Number,
-        required: true
     },
     postalCode: {
         type: String,
-        required: true
     },
     floor: {
         type: String
@@ -28,7 +25,7 @@ const cartDetailSchema = mongoose.Schema({
 })
 
 const cartSchema = mongoose.Schema({
-    UserId: {
+    userId: {
         type: String,
         required: true,
         unique: true
