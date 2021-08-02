@@ -18,8 +18,8 @@ POST api/image/upload
 
 // DONE // GET api/cart
 // DONE // POST api/cart/add
-POST api/cart/delete
-POST api/cart/submit
+// DONE // POST api/cart/delete
+// DONE // POST api/cart/submit
 
 GET api/orders
 GET api/orders/{:orderId}
