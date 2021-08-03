@@ -87,15 +87,14 @@ const auth = (passport) => {
   
   passport.use(
       new JWTStrategy(strategyJWT, async(token, done) => {
-        process.nextTick(() => {
-          return User.findById(token.id)
-                .then(user => {
-                    return done(null, user);
-                })
-                .catch(err => {
-                    return done(err);
-                });
-        })
+        try {
+          console.log('El token es:' + token)
+          const user = await User.findById(token.user._id)
+          console.log('El user es:' + user)
+          return done(null, user)          
+        } catch (error) {
+          return done(err);
+        }
       })
   )
 }
