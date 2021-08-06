@@ -3,7 +3,7 @@ Content-Type: application/json
 
   {
     "email": "ruja@hotmail.com",
-    "phone": "String",
+    "phone": 2804182666,
     "name": "Agustin Rujana",
     "password": "abcde12345",
     "passwordDup": "abcde12345",
@@ -15,7 +15,7 @@ POST http://localhost:8080/api/user/login HTTP/1.1
 Content-Type: application/json
 
   {
-    "email": 000,
+    "email": "ruja@hotmail.com",
     "password": "abcde12345"
   }
 ### Login User 

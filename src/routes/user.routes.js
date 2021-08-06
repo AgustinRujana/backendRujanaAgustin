@@ -15,6 +15,7 @@ userRouter.route('/signup').post(
         passport.authenticate('signup', async(err, user, info) => {
             try {
                 if(err){
+                    
                     return res.status(500).json(err)
                 }
 

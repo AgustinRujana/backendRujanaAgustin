@@ -64,7 +64,11 @@ const auth = (passport) => {
           process.nextTick( () => {
               //Busca el usuario correspondiente
               User.findOne({ email: email }, function (err, user) {
-                if (err) { return done(err) } //Atrapa errores
+                if (err) { 
+                  console.log('Entre al error')
+                  console.log(err)
+                  return done(err)
+                 } //Atrapa errores
   
                 if (!user) {
                   return done(null, false, {message: 'Incorrect Email'});
@@ -78,7 +82,7 @@ const auth = (passport) => {
               });
            });        
       } catch (error) {
-          done(error)
+          return done(error) 
       }
   }
   
