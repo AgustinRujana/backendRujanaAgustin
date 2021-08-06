@@ -1,6 +1,7 @@
-import { cart as Cart } from '../model/cart.js'
-import { product, product as Product } from '../model/products.js'
-import { order as Order } from '../model/orders.js'
+import { cart as Cart } from '../model/cart.model.js'
+import { product, product as Product } from '../model/products.model.js'
+import { order as Order } from '../model/orders.model.js'
+import { sendEmail } from '../middleware/nodemailer.js'
 
 
 export const findOne = (req, res) => {
@@ -70,7 +71,7 @@ export const cartSubmit = (req, res) => {
             if(cart.products.length === 0 ) {
                 return res.status(400).json({message: 'Carrito Vacio'}); 
             }
-            //Cuando el carrito existe
+            //Cuando el carrito existe y tiene algo
             const total = async () => {
                 let total = 0
                 cart.products.forEach(e => {
@@ -87,6 +88,7 @@ export const cartSubmit = (req, res) => {
             newOrder.state = 'Generado'
             newOrder.total = total()
 
+            sendEmail('La tienda', 'Informacion de la orden', newOrder, 'receptor')
             //ACA MANDO EL MAIL
             newOrder =  newOrder.save()  
 

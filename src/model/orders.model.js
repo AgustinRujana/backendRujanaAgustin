@@ -22,6 +22,8 @@ const orderSchema = mongoose.Schema({
     },
     state: {
         type: Date,
+        enum: ['generado', 'pagado', 'enviando', 'finalizado'],
+        default: 'generado',
         required: true,
     },
     total: {

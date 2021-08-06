@@ -26,7 +26,8 @@ const userSchema = mongoose.Schema({
         required: true
     },
     admin: {
-        type: Boolean
+        type: Boolean,
+        default: false
     }
 })
 

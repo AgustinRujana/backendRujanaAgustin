@@ -10,7 +10,7 @@ const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
 import auth from '../middleware/auth.js'
-import mainRoutes from '../routes/main.js'
+import mainRoutes from '../routes/main.routes.js'
 
 
 import config from '../../config.js'
@@ -46,7 +46,7 @@ app.use(passport.session())
 ///////////////
 
 //  Routes  //
-mainRoutes(app, passport)
+app.use('/api', mainRoutes)
 //////////////
 
 export default app

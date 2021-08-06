@@ -1,7 +1,7 @@
 import { Strategy as localStrategy } from 'passport-local'
 import { Strategy as JWTStrategy } from 'passport-jwt'
 import { ExtractJwt } from 'passport-jwt'
-import { user as User } from '../model/user.js'
+import { user as User } from '../model/user.model.js'
 
 import config from '../../config.js'
 
@@ -49,7 +49,7 @@ const auth = (passport) => {
               newUser.admin = data.admin || false
   
               newUser.save((err) => {
-                if(err) { throw err }
+                if(err) { return done(err) }
                 return done(null, newUser);
               })
             });
@@ -64,7 +64,7 @@ const auth = (passport) => {
           process.nextTick( () => {
               //Busca el usuario correspondiente
               User.findOne({ email: email }, function (err, user) {
-                if (err) { return done(err); } //Atrapa errores
+                if (err) { return done(err) } //Atrapa errores
   
                 if (!user) {
                   return done(null, false, {message: 'Incorrect Email'});

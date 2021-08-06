@@ -1,15 +1,21 @@
+import express from 'express'
+import passport from 'passport'
+
 import { body, validationResult} from 'express-validator'
 import * as productService from '../services/product.service.js'
 
-export default function productsRoutes(app, passport) {
-    app.route('/api/products')
-        .get(productService.getProducts)
-        .post(            
-            //passport.authenticate('jwt', {session: false}), //HAY QUE ARREGLAR LA AUTENTICACION
-            // (req, res, next) => {
-            //     if(req.user.admin === false) { res.status(401).json({ message: 'Not an admin'}) }
-            //     next()
-            // }, //POR ALGUNA RAZON req.user = undefined
+const productsRouter = express.Router();
+
+    productsRouter.route('/').get(productService.getProducts)
+
+    //productsRouter.route('/').get((req, res) => { res.send('Funciona')} )
+
+    productsRouter.route('/').post(        
+            passport.authenticate('jwt', {session: false}), //HAY QUE ARREGLAR LA AUTENTICACION
+            (req, res, next) => {
+                if(req.user.admin === false) { res.status(401).json({ message: 'Not an admin'}) }
+                next()
+            },
             body('stock').isNumeric().withMessage('This field just allow numbers'),
             body('price').isNumeric().withMessage('This field just allow numbers'),
             body('name').notEmpty().withMessage('This field is required'),
@@ -33,17 +39,18 @@ export default function productsRoutes(app, passport) {
                 }
             }
         )
-    app.route('/api/products/:category')
-        .get(productService.getCategorie)
+    productsRouter.route('/:category').get(productService.getCategorie)
 
-    app.route('/api/products/:productId')
-        .patch(
-            //passport.authenticate('jwt', {session: false}), //HAY QUE ARREGLAR LA AUTENTICACION
-            // (req, res, next) => {
-            //     if(req.user.admin === false) { res.status(401).json({ message: 'Not an admin'}) }
-            //     next()
-            // }, //POR ALGUNA RAZON req.user = undefined
+    productsRouter.route('/:productId').patch(
+            passport.authenticate('jwt', {session: false}), //HAY QUE ARREGLAR LA AUTENTICACION
+            (req, res, next) => {
+                if(req.user.admin === false) { res.status(401).json({ message: 'Not an admin'}) }
+                next()
+            },
             productService.updateOne            
         )
-        .delete(productService.deleteOne)
-}
+
+    productsRouter.delete(productService.deleteOne)
+
+
+export default productsRouter;

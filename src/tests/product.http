@@ -1,0 +1,31 @@
+GET http://localhost:8080/api/products HTTP/1.1
+### Get All Products
+
+GET http://localhost:8080/api/products/test HTTP/1.1
+### Get All Category /api/products/:category
+
+GET http://localhost:8080/api/products/:_id HTTP/1.1
+### Get Single Products
+
+POST http://localhost:8080/api/products HTTP/1.1
+Content-Type: application/json
+Authorization: token eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyIjp7Il9pZCI6IjYxMGQzNDFiZDQwZDYzNDk2ODY2NjA5MCIsImVtYWlsIjoicnVqYW5hQGhvdG1haWwuY29tIn0sImlhdCI6MTYyODI1NTI3MSwiZXhwIjoxNjI4Mjc2ODcxfQ.WfuHLAo6EqoFHoafmUML65oU8VZ4SMo0kGg21ZgLRBg
+
+  {
+    "name": "Test Product 1#",
+    "description": "Test Description",
+    "category": "test",
+    "price": 200,
+    "stock": 50
+  }
+### Add Single Product
+
+POST http://localhost:8080/api/products HTTP/1.1
+Content-Type: application/json
+Authorization: token <JWT Token>
+
+  {
+    "email": "agusrujana@hotmail.com",
+    "password": "abcde12345"
+  }
+### Login Products

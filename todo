@@ -1,14 +1,9 @@
 // DONE // POST api/user/signup
 // DONE // POST api/user/login
 
-POST api/image/upload
-    Falta productId
-    Validacion tira siempre 401
-    routes/image linea 22
-
-// DONE // GET api/image/{imageFileName}
-
-// DONE // DELETE api/image/{imageFileName}
+// DONE // POST api/image/upload
+// DONE // GET api/image/{imageFileName}    //Anda lentisimo
+// DONE // DELETE api/image/{imageFileName} //Anda lentisimo
 
 // DONE // GET api/products
 // DONE // GET api/products/{:category}
@@ -19,7 +14,7 @@ POST api/image/upload
 // DONE // GET api/cart
 // DONE // POST api/cart/add
 // DONE // POST api/cart/delete
-// DONE // POST api/cart/submit
+// DONE // POST api/cart/submit //Callback Nodemailer
 
 GET api/orders
 GET api/orders/{:orderId}

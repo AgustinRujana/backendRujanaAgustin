@@ -1,4 +1,4 @@
-import { product as Product } from "../model/products.js"
+import { product as Product } from "../model/products.model.js"
 
 export const getProducts = async (req, res) => {
     let products = await Product.find({})
