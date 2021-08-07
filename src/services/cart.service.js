@@ -68,37 +68,31 @@ export const cartSubmit = async (req, res) => {
     
     if(!cart) {
         return res.status(400).json({ message: 'Carrito Inexistento o vacio'})
-
     }
 
-    const totalCal = () => {
-        var total = 0
+    const totalCal = async () => {
+        let total = 0
 
-        cart.products.forEach((product) => {
-            Product.findOne({ _id: product.productId })
+        for ( const product of cart.products) {
+            await Product.findOne({ _id: product.productId })
             .then( e => {
-                console.log(total + ' + '  + e.price + '*' + product.quantity)
                 total = total + e.price * product.quantity
-                console.log('Total dentro then es ' + total)
             })
-            console.log('Total dentro forEach es ' + total)
-        })
-        console.log('Total dentro funcion es ' + total)
-
+        }
         return total
     }
 
     let newOrder = new Order()
     newOrder.userId = req.user._id
     newOrder.items = cart.products
-    newOrder.total = totalCal()
+    newOrder.total = await totalCal()
 
     //sendEmail('La tienda', 'Informacion de la orden', newOrder, 'receptor')
 
 
-    //await newOrder.save()
-    //await Cart.findByIdAndRemove(req.user._id);
-
+    //await Cart.findOneAndRemove({_id: req.user._id}); Me hubiera gustado borrar el carrito pero no funciona
+    await newOrder.save()
+    
     return res.status(201).json(newOrder);
 }
 

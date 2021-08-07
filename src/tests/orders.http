@@ -1,0 +1,16 @@
+GET http://localhost:8080/api/orders HTTP/1.1
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyIjp7Il9pZCI6IjYxMGQ0N2VkNjg4NDA1MzVlMDVkYjBjYSIsImVtYWlsIjoicnVqYUBob3RtYWlsLmNvbSJ9LCJpYXQiOjE2MjgzNDM3OTYsImV4cCI6MTYyODM2NTM5Nn0.jwGWAMYiF2RQhEQI74Ss6Hcfmugysa8uE2xiCKIq3CE
+### Get user orders
+
+GET http://localhost:8080/api/orders/610ebdfe4b40cc1330bc5766 HTTP/1.1
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyIjp7Il9pZCI6IjYxMGQ0N2VkNjg4NDA1MzVlMDVkYjBjYSIsImVtYWlsIjoicnVqYUBob3RtYWlsLmNvbSJ9LCJpYXQiOjE2MjgzNDM3OTYsImV4cCI6MTYyODM2NTM5Nn0.jwGWAMYiF2RQhEQI74Ss6Hcfmugysa8uE2xiCKIq3CE
+### Get one order
+
+POST http://localhost:8080/api/orders/complete HTTP/1.1
+Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyIjp7Il9pZCI6IjYxMGQ0N2VkNjg4NDA1MzVlMDVkYjBjYSIsImVtYWlsIjoicnVqYUBob3RtYWlsLmNvbSJ9LCJpYXQiOjE2MjgzNDM3OTYsImV4cCI6MTYyODM2NTM5Nn0.jwGWAMYiF2RQhEQI74Ss6Hcfmugysa8uE2xiCKIq3CE
+
+  {
+    "orderId": "610ebe8f355b4029bc85bd9b"
+  }
+### Add, update products in cart

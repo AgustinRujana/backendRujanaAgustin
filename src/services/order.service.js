@@ -4,6 +4,7 @@ import { order as Order } from '../model/orders.model.js'
 import { user as User } from '../model/user.model.js'
 
 
+
 export const getOrder = async (req, res) => {
     try {
         const orders = await Order.find({userId: req.user._id})
@@ -15,7 +16,9 @@ export const getOrder = async (req, res) => {
 
 export const getOneOrder = async (req, res) => {
     try {
-        const order = await Order.find({_id: req.params.orderId, userId: req.user._id})
+        const order = await Order.findOne({userId: req.user._id, _id: req.params.orderId})
+
+        if(!order) { return res.status(404).json({message: 'Orden no encontrada'}) }
         res.status(200).json(order)
     } catch (err) {
         throw err        
@@ -25,9 +28,10 @@ export const getOneOrder = async (req, res) => {
 export const completeOrder = async (req, res) => {
     try {
         const { orderId } = req.body
-        const order = await Order.find({_id: orderId})
+        const order = await Order.findOne({_id: orderId})
 
         if(!order) { return res.status(404).json({message: 'La orden no existe'}) }
+        console.log(order)
         if(order.state !== 'generado') { return res.status(400).json({message: 'El estado de la orden es distinto de generado'})}
 
         order.state = 'finalizado'
