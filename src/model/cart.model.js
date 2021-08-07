@@ -34,16 +34,10 @@ const cartSchema = mongoose.Schema({
         type: Array,
         required: true
     },
-    creationDate: {
-        type: Date,
-        required: true,
-    },
-    updateDate: {
-        type: Date,
-        required: true,
-    },
     details: cartDetailSchema
-
+    },
+    {
+        timestamps: { createdAt: 'createdAt', updatedAt: 'updatedAt' },
 })
 
 export const cart = mongoose.model(collectionCarts, cartSchema, 'cart')

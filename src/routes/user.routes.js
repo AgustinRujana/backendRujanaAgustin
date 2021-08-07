@@ -1,4 +1,3 @@
-import { body, validationResult} from 'express-validator'
 import jwt from 'jsonwebtoken'
 import express from 'express'
 import passport from 'passport'
@@ -12,26 +11,25 @@ userRouter.route('/signup').post(
         //Sino hay errores solo queda chequear la igualdad de las contrasenas
         if (req.body.password !== req.body.passwordDup) { return res.status(400).json({message: 'Passwords need to match'}) }
         else {
-        passport.authenticate('signup', async(err, user, info) => {
-            try {
-                if(err){
-                    
+            passport.authenticate('signup', async(err, user, info) => {
+                try {
+                    if(err){
+                        return res.status(500).json(err)
+                    }
+
+                    if (!user && info) {
+                        return res.status(400).json({ message: info.message })
+                    }
+
+                    res.status(201).json({
+                        message: 'Signup successful',
+                        user: user
+                    })
+
+                } catch (err) {
                     return res.status(500).json(err)
-                }
-
-                if (!user && info) {
-                    return res.status(400).json({ message: info.message })
-                }
-
-                res.status(201).json({
-                    message: 'Signup successful',
-                    user: user
-                })
-
-            } catch (err) {
-                return res.status(500).json(err)
-            }   
-        })(req, res)
+                }   
+            })(req, res)
         }
     }
 )
@@ -42,6 +40,7 @@ userRouter.route('/login').post(
         passport.authenticate('login', async(err, user, info) => {
             try {
                 if(err){
+                    console.log('Primer error')
                     return res.status(500).json(err)
                 }
 
@@ -50,8 +49,7 @@ userRouter.route('/login').post(
                 }
 
                 req.logIn(user, {session: false}, async (err) => {
-                    console.log(user._id)
-                    if (err) return err
+                    if (err) return res.status(500).json(err)
 
                     const body = { _id: user._id, email: user.email }
                     const token = jwt.sign({ user: body }, config.JWT_SECRET_KEY, {expiresIn: config.TOKEN_KEEP_ALIVE})
@@ -60,6 +58,7 @@ userRouter.route('/login').post(
                 })
 
             } catch (err) {
+                console.log('Segundo error')
                 return res.status(500).json(err)
             }
             

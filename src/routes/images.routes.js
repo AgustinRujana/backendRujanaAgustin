@@ -14,11 +14,6 @@ conn.once("open", function () {
     gfs.collection("photos");
 });
 
-// {
-// 	"email": "aguru201@hotmail.com",
-// 	"password": "HolaHolaHola"
-// }
-
 imageRouter.route('/upload').post(
     passport.authenticate('jwt', {session: false}),
     (req, res, next) => {

@@ -1,39 +1,28 @@
-GET http://localhost:8080/api/products HTTP/1.1
-### Get All Products
+GET http://localhost:8080/api/cart HTTP/1.1
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyIjp7Il9pZCI6IjYxMGQ0N2VkNjg4NDA1MzVlMDVkYjBjYSIsImVtYWlsIjoicnVqYUBob3RtYWlsLmNvbSJ9LCJpYXQiOjE2MjgzNDM3OTYsImV4cCI6MTYyODM2NTM5Nn0.jwGWAMYiF2RQhEQI74Ss6Hcfmugysa8uE2xiCKIq3CE
+### Get user cart
 
-GET http://localhost:8080/api/products/test HTTP/1.1
-### Get All Category /api/products/:category
-
-GET http://localhost:8080/api/products/610d34a776db2713c846c728 HTTP/1.1
-### Get Single Product
-
-POST http://localhost:8080/api/products HTTP/1.1
+POST http://localhost:8080/api/cart/add HTTP/1.1
 Content-Type: application/json
 Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyIjp7Il9pZCI6IjYxMGQ0N2VkNjg4NDA1MzVlMDVkYjBjYSIsImVtYWlsIjoicnVqYUBob3RtYWlsLmNvbSJ9LCJpYXQiOjE2MjgzNDM3OTYsImV4cCI6MTYyODM2NTM5Nn0.jwGWAMYiF2RQhEQI74Ss6Hcfmugysa8uE2xiCKIq3CE
 
   {
-    "name": "Test Product 3#",
-    "description": "Test Description",
-    "category": "testtest",
-    "price": 200,
-    "stock": 50
+    "productId": "610e8e09e3b26b2a80dac0eb",
+    "quantity": "20"
   }
-### Add Single Product
+### Add, update products in cart
 
-PATCH  http://localhost:8080/api/products/610e93aebe920a259cd9e537 HTTP/1.1
+POST http://localhost:8080/api/cart/delete HTTP/1.1
 Content-Type: application/json
 Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyIjp7Il9pZCI6IjYxMGQ0N2VkNjg4NDA1MzVlMDVkYjBjYSIsImVtYWlsIjoicnVqYUBob3RtYWlsLmNvbSJ9LCJpYXQiOjE2MjgzNDM3OTYsImV4cCI6MTYyODM2NTM5Nn0.jwGWAMYiF2RQhEQI74Ss6Hcfmugysa8uE2xiCKIq3CE
 
   {
-    "name": "Test Patch 2#",
-    "description": "Test Description",
-    "category": "test",
-    "price": 200,
-    "stock": 50
+    "productId": "610e8e09e3b26b2a80dac0eb",
+    "quantity": "15"
   }
-### Update Product
+### 
 
-DELETE  http://localhost:8080/api/products/610e93aebe920a259cd9e537 HTTP/1.1
+POST http://localhost:8080/api/cart/submit HTTP/1.1
 Content-Type: application/json
 Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyIjp7Il9pZCI6IjYxMGQ0N2VkNjg4NDA1MzVlMDVkYjBjYSIsImVtYWlsIjoicnVqYUBob3RtYWlsLmNvbSJ9LCJpYXQiOjE2MjgzNDM3OTYsImV4cCI6MTYyODM2NTM5Nn0.jwGWAMYiF2RQhEQI74Ss6Hcfmugysa8uE2xiCKIq3CE
-### Delete Product
+### Submit Cart

@@ -1,4 +1,4 @@
-import { product as Product } from "../model/products.model.js"
+import { product, product as Product } from "../model/products.model.js"
 
 export const getProducts = async (req, res) => {
     let products = await Product.find({})
@@ -47,25 +47,23 @@ export const updateOne = async (req, res) => {
   }
 
   const { name, description, category, price, stock } = req.body
-  
-  if(typeof name !== 'string') { return res.sendStatus(400) }
-  if(typeof description !== 'string') { return res.sendStatus(400) }
-  if(typeof category !== 'string') { return res.sendStatus(400) }
-  if(typeof price !== 'number') { return res.sendStatus(400) }
-  if(typeof stock !== 'number') { return res.sendStatus(400) }
-
   producto.name = name
   producto.description = description
   producto.category = category
   producto.stock = stock
   producto.price = price
+
+  await producto.save()
+  res.status(200).json({ message: 'Producto Actualizado'})
 }
 
 export const deleteOne = async (req, res) => {
-Product.findByIdAndDelete(req.params.productId).then(product => {
-  if(!product) { return res.status(404)}
-  res.status(200)
-}).catch( err => {
-  res.status(500).json({message: err})
-})
+  try {
+    const id = req.params.productId;
+    const producto = await Product.findByIdAndRemove(id);
+    if(!producto) { return res.status(404).json({ message: 'Producto no encontrado'})}
+    res.status(200).json({message: 'Producto Borrado', producto});
+  } catch (err) {
+    return res.status(500).json({message: err});
+  }
 }

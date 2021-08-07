@@ -16,12 +16,8 @@ const orderSchema = mongoose.Schema({
         type: Array,
         required: true
     },
-    creationDate: {
-        type: Date,
-        required: true,
-    },
     state: {
-        type: Date,
+        type: String,
         enum: ['generado', 'pagado', 'enviando', 'finalizado'],
         default: 'generado',
         required: true,
@@ -30,6 +26,10 @@ const orderSchema = mongoose.Schema({
         type: Number,
         required: true
     }
-})
+},
+    {
+        timestamps: { createdAt: 'createdAt', updatedAt: 'updatedAt' },
+    }
+)
 
 export const order = mongoose.model(collectionOrders, orderSchema, 'order')

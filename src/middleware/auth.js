@@ -65,8 +65,6 @@ const auth = (passport) => {
               //Busca el usuario correspondiente
               User.findOne({ email: email }, function (err, user) {
                 if (err) { 
-                  console.log('Entre al error')
-                  console.log(err)
                   return done(err)
                  } //Atrapa errores
   
@@ -92,9 +90,7 @@ const auth = (passport) => {
   passport.use(
       new JWTStrategy(strategyJWT, async(token, done) => {
         try {
-          console.log('El token es:' + token)
           const user = await User.findById(token.user._id)
-          console.log('El user es:' + user)
           return done(null, user)          
         } catch (error) {
           return done(err);

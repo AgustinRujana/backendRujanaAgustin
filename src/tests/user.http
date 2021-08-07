@@ -3,7 +3,7 @@ Content-Type: application/json
 
   {
     "email": "ruja@hotmail.com",
-    "phone": 2804182666,
+    "phone": "2804182666",
     "name": "Agustin Rujana",
     "password": "abcde12345",
     "passwordDup": "abcde12345",

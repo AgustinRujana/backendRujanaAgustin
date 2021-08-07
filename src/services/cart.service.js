@@ -1,5 +1,5 @@
 import { cart as Cart } from '../model/cart.model.js'
-import { product, product as Product } from '../model/products.model.js'
+import { product as Product } from '../model/products.model.js'
 import { order as Order } from '../model/orders.model.js'
 import { sendEmail } from '../middleware/nodemailer.js'
 
@@ -15,134 +15,132 @@ export const findOne = (req, res) => {
 
 export const addProduct = async (req, res) => {
     const { productId, quantity} = req.body;
-    Product.findById({ productId }).then( product => {
-        //Checkeo si el producto existe
-        if(!product) { return res.status(400).json({message: 'No existe producto'})}
-        //Checkeo el stock
-        if(quantity > product.stock) { return res.status(400).json({message: 'Cantidad no valida'})}
-        
-        try {
-            let cart = Cart.findOne({ userId: req.user.id });
-        
-            if (cart) {
-                //Cuando el carrito existe
-              let itemIndex = cart.products.findIndex(p => p.productId == productId);
-        
-              if (itemIndex > -1) {
-                //Si existe el producto actualizo la cantidad
-                let productItem = cart.products[itemIndex];
-                productItem.quantity = quantity;
-                cart.products[itemIndex] = productItem;
-                cart.updateDate = new Date()
-              } else {
-                //Sino existe lo agrego
-                cart.products.push({ productId, quantity});
-                cart.updateDate = new Date()
-              }
-              //Guardo todo y envio
-              cart = cart.save();
-              return res.status(201).json(cart);
-            } else {
-                //Si el carrito no existe
-              const newCart = Cart.create({
-                userId,
-                products: [{ productId, quantity}],
-                creationDate: new Date(),
-                updateDate: new Date(),
-                details: {}
-              });
-        
-              return res.status(201).json(newCart);
-            }
-        } catch (err) {
-            res.status(500).json({message: err})
+
+    const producto = await Product.findOne({ _id: productId })
+
+    if(!producto) { return res.status(400).json({ message: 'Producto no encontrado'})}
+    if(quantity > producto.stock) { return res.status(400).json({message: 'Cantidad no valida'})}
+
+    let cart = await Cart.findOne({ userId: req.user._id });
+    
+    //Si el carrito no existe lo creo y agrego el producto
+    if(!cart) {
+        const newCart =  new Cart()
+        newCart.userId = req.user._id
+        newCart.products = [{ productId, quantity}]
+        newCart.details = {
+            street: 'Calle usuario',
+            streetNumber: '999',
+            postalCode: 'Postal',
+            floor: 'Piso',
+            apartment: 'Departamento'
         }
-    }).catch( err => {
-        res.status(500).json({message: err})
-    })
-    
-}
-export const cartSubmit = (req, res) => {
-    try {
-        let cart = Cart.findOne({ userId: req.user.id });
-    
-        if (cart) {
-            //Encuentro el carrito y chequeo que tenga algo
-            if(cart.products.length === 0 ) {
-                return res.status(400).json({message: 'Carrito Vacio'}); 
-            }
-            //Cuando el carrito existe y tiene algo
-            const total = async () => {
-                let total = 0
-                cart.products.forEach(e => {
-                    let product = Product.findById(e.productId)
-                    total = total + product.price * e.quantity
-                });
-                return total
-            }
 
-            let newOrder = new Order()
-            newOrder.userId = req.user._id
-            newOrder.items = cart.products
-            newOrder.creationDate = new Date()
-            newOrder.state = 'Generado'
-            newOrder.total = total()
+        await newCart.save()
+        return res.status(201).json(newCart)
 
-            sendEmail('La tienda', 'Informacion de la orden', newOrder, 'receptor')
-            //ACA MANDO EL MAIL
-            newOrder =  newOrder.save()  
+    } else { //Si el carrito existe
+        let itemIndex = cart.products.findIndex(p => p.productId === productId);
+        if (itemIndex > -1) {
+            //Si existe el producto actualizo la cantidad
+            let productItem = cart.products[itemIndex]; // productoItem es { productId: id , quantity: number }
+            productItem.quantity = quantity;
+            cart.products[itemIndex] = productItem;
 
-            cart.products = []
-            cart = cart.save();
+            cart.markModified('products') //Sin esta propiedad no se actualizaba el objeto anidado #DATAZO
 
-            return res.status(200);
+            await cart.save();
+            return res.status(201).json(cart);
         } else {
-            //Si el carrito no existe    
-            return res.status(400).json({message: 'No existe carrito'});
+            //Sino existe lo agrego
+            cart.products.push({ productId, quantity});
+
+            await cart.save();
+            return res.status(201).json(cart);
         }
-    } catch (err) {
-        res.status(500).json({message: err})
     }
-    
 }
 
-export const deleteProduct = (req, res) => {
-    const { productId, quantity} = req.body;
-    Product.findById({ productId }).then( product => {
-        //Checkeo si el producto existe
-        if(!product) { return res.status(400)}
-        //Checkeo el stock
-        if(quantity < 0 || quantity > product.stock) { return res.status(400)}
-
-        try {
-            let cart =  Cart.findOne({ userId: req.user.id });
-        
-            if (cart) {
-                //Cuando el carrito existe
-              let itemIndex = cart.products.findIndex(p => p.productId == productId);
-        
-              if (itemIndex > -1) {
-                //Si existe el producto actualizo la cantidad
-                let productItem = cart.products[itemIndex];
-                productItem.quantity = productItem.quantity - quantity;
-                cart.products[itemIndex] = productItem;
-                cart.updateDate = new Date()
-              } else {
-                //Sino ese producto en el carrito
-                res.status(400)
-              }
-              //Guardo todo y envio
-              cart =  cart.save();
-              return res.status(201).send(cart);
-            } else {
-                //Si el carrito no existe        
-              return res.status(400);
-            }
-        } catch (err) {
-            res.status(500).json({message: err})
-        }
-    }).catch( err => {
-        res.status(500).json({message: err})
-    })
+export const cartSubmit = async (req, res) => {
     
+
+    const cart = await Cart.findOne({ userId: req.user._id });
+    
+    if(!cart) {
+        return res.status(400).json({ message: 'Carrito Inexistento o vacio'})
+
+    }
+
+    const totalCal = () => {
+        var total = 0
+
+        cart.products.forEach((product) => {
+            Product.findOne({ _id: product.productId })
+            .then( e => {
+                console.log(total + ' + '  + e.price + '*' + product.quantity)
+                total = total + e.price * product.quantity
+                console.log('Total dentro then es ' + total)
+            })
+            console.log('Total dentro forEach es ' + total)
+        })
+        console.log('Total dentro funcion es ' + total)
+
+        return total
+    }
+
+    let newOrder = new Order()
+    newOrder.userId = req.user._id
+    newOrder.items = cart.products
+    newOrder.total = totalCal()
+
+    //sendEmail('La tienda', 'Informacion de la orden', newOrder, 'receptor')
+
+
+    //await newOrder.save()
+    //await Cart.findByIdAndRemove(req.user._id);
+
+    return res.status(201).json(newOrder);
+}
+
+export const deleteProduct = async (req, res) => {
+    const { productId, quantity} = req.body;
+
+    const producto = await Product.findOne({ _id: productId })
+    let cart = await Cart.findOne({ userId: req.user._id });
+
+    if(!producto) { return res.status(400).json({ message: 'Producto no encontrado'}) }
+    if(!cart) { return res.status(400).json({ message: 'Carrito no encontrado'}) }
+
+    let itemIndex = cart.products.findIndex(p => p.productId === productId);
+    if (itemIndex > -1) {
+        //Si existe el producto actualizo la cantidad
+        let productItem = cart.products[itemIndex]; // productoItem es { productId: id , quantity: number }
+        
+        //Si quiero borrar mas de lo que tengo sale error
+        if(quantity > productItem.quantity) { return res.status(400).json({message: 'Cantidad no valida'})}
+        
+        //Si borro la misma cantidad borro el producto
+        if(quantity === productItem.quantity) {
+            cart.products.splice(itemIndex, 1)
+
+            cart.markModified('products') //Sin esta propiedad no se actualizaba el objeto anidado #DATAZO
+
+            await cart.save();
+            return res.status(201).json(cart);
+        }
+        //Sino lo resto a lo que tengo
+        productItem.quantity = productItem.quantity - quantity;
+        cart.products[itemIndex] = productItem;
+
+        cart.markModified('products') //Sin esta propiedad no se actualizaba el objeto anidado #DATAZO
+
+        await cart.save();
+        return res.status(201).json(cart);
+    } else {
+        //Sino existe lo agrego
+        cart.products.push({ productId, quantity});
+
+        await cart.save();
+        return res.status(201).json(cart);
+    }
 }
