@@ -31,7 +31,6 @@ export const completeOrder = async (req, res) => {
         const order = await Order.findOne({_id: orderId})
 
         if(!order) { return res.status(404).json({message: 'La orden no existe'}) }
-        console.log(order)
         if(order.state !== 'generado') { return res.status(400).json({message: 'El estado de la orden es distinto de generado'})}
 
         order.state = 'finalizado'
