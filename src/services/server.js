@@ -28,6 +28,19 @@ app.use(express.urlencoded({ extended: true }))
 app.use(express.static(path.join(__dirname, '/public')))
 ////////////////////
 
+// Handlebars //
+import handlebars from 'express-handlebars'
+app.engine( 
+    "hbs",
+    handlebars({
+        extname: ".hbs",
+        defaultLayout: "index.hbs"
+    })
+);
+app.set("view engine", "hbs");
+app.set("views", path.join(__dirname, 'views'));
+////////////////
+
 //  Session, Passport & Flash//
 auth(passport)
 

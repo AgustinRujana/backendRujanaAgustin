@@ -1,0 +1,34 @@
+<div class="container">
+    {{#if listExists}}
+        <div class="row">
+            <h1>Lista de productos</h1>
+            <a href="/productos">Volver al formulario</a>
+        </div>
+        <div class="row justify-content-center">
+            <table class="table-primary">   
+                <thead>
+                    <tr>
+                        <th scope="col">Image</th>
+                        <th scope="col">Description</th>
+                        <th scope="col">Price</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {{#each productos}}
+                        <tr>
+                            <td><img height=75px src="{{this.thumbnail}}" alt="{{this.title}}"></td>
+                            <td>{{this.title}}</td>
+                            <td>${{this.price}}</td>
+                        </tr>
+                    {{/each}}
+                </tbody>
+            </table>
+        </div>
+    {{else}}
+        <div class="row">
+            <h1>Todavia no tienes productos</h1>
+            <a href="/productos">Volver al formulario</a>
+        </div>
+    {{/if}}
+</div>
+
