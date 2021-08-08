@@ -59,6 +59,9 @@ app.use(passport.session())
 ///////////////
 
 //  Routes  //
+app.get('/', (req, res) => {
+    res.send("Welcome to my project")
+})
 app.use('/api', mainRoutes)
 //////////////
 
